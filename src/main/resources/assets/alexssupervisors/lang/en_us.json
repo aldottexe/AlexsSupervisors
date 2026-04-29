@@ -1,5 +1,4 @@
 {
-  "itemGroup.alexssupervisors": "Example Mod Tab",
-  "block.alexssupervisors.example_block": "Example Block",
-  "item.alexssupervisors.example_item": "Example Item"
+  "item.alexssupervisors.supervisors_cap": "Supervisor's Cap",
+  "itemGroup.creativeTabName": "Alex's Supervisors"
 }
