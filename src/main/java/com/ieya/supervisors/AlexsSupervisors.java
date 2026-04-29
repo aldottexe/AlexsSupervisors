@@ -1,10 +1,13 @@
 package com.ieya.supervisors;
 
 import com.ieya.supervisors.items.SupervisorsCapItem;
+import com.mojang.serialization.Codec;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.attachment.AttachmentType;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -24,6 +27,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.function.Supplier;
+
 @Mod(AlexsSupervisors.MODID)
 public class AlexsSupervisors {
     public static final String MODID = "alexssupervisors";
@@ -36,6 +41,11 @@ public class AlexsSupervisors {
             SupervisorsCapItem::new,
             new Item.Properties()
     );
+
+    // Register custom wolf field to store if wearing hat
+    private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, MODID);
+    public static final Supplier<AttachmentType<Boolean>> WEARING_CAP = ATTACHMENT_TYPES.register("wearing_cap", () -> AttachmentType.builder(() -> false).serialize(Codec.BOOL).build());
+
 
     // Register Creative Mode Tab
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
@@ -55,10 +65,10 @@ public class AlexsSupervisors {
         // Register the Deferred Registers to the mod event bus
         ITEMS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
+        ATTACHMENT_TYPES.register(modEventBus);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
